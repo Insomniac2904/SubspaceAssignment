@@ -3,6 +3,8 @@ const express = require("express");
 const app = express();
 const _ = require("lodash");
 const PORT = process.env.PORT || 3000;
+const cors = require("cors");
+app.use(cors());
 const {
   fetchBlogData,
   calculateAnalytics,
