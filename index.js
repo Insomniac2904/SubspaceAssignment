@@ -3,8 +3,6 @@ const express = require("express");
 const app = express();
 const _ = require("lodash");
 const PORT = process.env.PORT || 3000;
-const cors = require("cors");
-app.use(cors());
 const {
   fetchBlogData,
   calculateAnalytics,
@@ -14,38 +12,31 @@ const {
 let Cache = getBlogData();
 
 // for /api/blog-stats
-app.get(
-  "https://subspace-assignment-i33f2a3is-insomniac2904.vercel.app/api/blog-stats",
-  fetchBlogData,
-  async (req, res) => {
-    try {
-      const analysisData = await calculateAnalytics();
-      res.json(analysisData);
-    } catch (error) {}
-  }
-);
+app.get("/api/blog-stats", fetchBlogData, async (req, res) => {
+  try {
+    const analysisData = await calculateAnalytics();
+    res.json(analysisData);
+  } catch (error) {}
+});
 
 //for /api/blog-search
-app.get(
-  "https://subspace-assignment-i33f2a3is-insomniac2904.vercel.app/api/blog-search",
-  async (req, res) => {
-    const query = req.query.query;
-    if (!query) {
-      return res.status(400).json({ error: "Query parameter is missing" });
-    }
-    if (!Cache) {
-      await doFetching();
-      Cache = getBlogData();
-    }
-    const blogData = Cache;
-    // search
-    const filteredBlogs = _.filter(blogData, (blog) => {
-      return blog.title.toLowerCase().includes(query.toLowerCase());
-    });
-    if (filteredBlogs.length == 0) res.json("No such title Present.");
-    else res.json(filteredBlogs);
+app.get("/api/blog-search", async (req, res) => {
+  const query = req.query.query;
+  if (!query) {
+    return res.status(400).json({ error: "Query parameter is missing" });
   }
-);
+  if (!Cache) {
+    await doFetching();
+    Cache = getBlogData();
+  }
+  const blogData = Cache;
+  // search
+  const filteredBlogs = _.filter(blogData, (blog) => {
+    return blog.title.toLowerCase().includes(query.toLowerCase());
+  });
+  if (filteredBlogs.length == 0) res.json("No such title Present.");
+  else res.json(filteredBlogs);
+});
 
 // handling error
 app.use((err, req, res, next) => {
