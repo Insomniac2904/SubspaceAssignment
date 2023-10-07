@@ -16,11 +16,8 @@
 </ul>
 
 # Api endpoints:
-<ul>
-  <li>
-    http://localhost:3000/api/blog-stats
-  </li>
-  <li>
-    http://localhost:3000/api/blog-search?query=privacy
-  </li>
-</ul>
+
+    https://subspaceassignment-5stz.onrender.com/api/blog-stats
+
+    https://subspaceassignment-5stz.onrender.com/api/blog-search?query=privacy
+ 
